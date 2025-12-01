@@ -2,7 +2,7 @@ namespace Tests.DSL;
 
 public class Create
 {
-    public static KeyStoreBuilder KeyStore()
+    public static KeyStoreBuilder Store()
     {
         return new KeyStoreBuilder();
     }

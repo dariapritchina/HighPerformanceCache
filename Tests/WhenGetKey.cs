@@ -13,7 +13,7 @@ public class WhenGetKey
     public void ForNotExistingKey_ReturnsNull()
     {
         // Arrange
-        var keyStore = Create.KeyStore().Please();
+        var keyStore = Create.Store().Please();
         
         // Act
         var key = keyStore.Get("somethingKey");
