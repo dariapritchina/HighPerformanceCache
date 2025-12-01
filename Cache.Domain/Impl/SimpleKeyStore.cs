@@ -23,5 +23,6 @@ public class SimpleKeyStore : IKeyStore
 
     public void Delete(string key)
     {
+        _keyValues.Remove(key);
     }
 }
