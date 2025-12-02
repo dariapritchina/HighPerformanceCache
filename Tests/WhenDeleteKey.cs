@@ -8,15 +8,15 @@ public class WhenDeleteKey
     public void KeyAndValueWillBeDeleted()
     {
         // Arrange
-        const string key = "anyKey"; 
+        const string anyKey = "anyKey"; 
         var store = Create.Store()
-            .WithKeyValue("anyKey", "anyValue"u8.ToArray())
+            .WithKeyValue(anyKey, "anyValue"u8.ToArray())
             .Please();
         
         // Act
-        store.Delete("anyKey");
+        store.Delete(anyKey);
         
         // Assert
-        Assert.That(store.Get("anyKey"), Is.Null);
+        Assert.That(store.Get(anyKey), Is.Null);
     }
 }
