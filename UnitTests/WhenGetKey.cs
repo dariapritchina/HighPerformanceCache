@@ -29,6 +29,6 @@ public class WhenGetKey
         var value = keyStore.Get("somethingKey");
         
         // Assert
-        Assert.Equal(value, "anyValue"u8.ToArray());
+        Assert.Equal("anyValue"u8.ToArray(), value);
     }
 }

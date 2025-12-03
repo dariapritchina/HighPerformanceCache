@@ -15,7 +15,7 @@ public class WhenSetKey
         store.Set("anyNewKey", value);
         
         // Assert
-        Assert.Equal(store.Get("anyNewKey"), value);
+        Assert.Equal(value, store.Get("anyNewKey"));
     }
 
     [Fact]
@@ -31,6 +31,6 @@ public class WhenSetKey
         store.Set(key, "newValue"u8.ToArray());
         
         // Assert
-        Assert.Equal(store.Get(key), "newValue"u8.ToArray());
+        Assert.Equal("newValue"u8.ToArray(), store.Get(key));
     }
 }
