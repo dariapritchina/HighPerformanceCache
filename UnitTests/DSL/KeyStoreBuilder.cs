@@ -1,7 +1,7 @@
 using Cache.Domain.Impl;
 using Cache.Domain.Interfaces;
 
-namespace Tests.DSL;
+namespace UnitTests.DSL;
 
 public class KeyStoreBuilder
 {

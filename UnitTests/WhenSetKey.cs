@@ -1,11 +1,10 @@
-using System.Text;
-using Tests.DSL;
+using UnitTests.DSL;
 
-namespace Tests;
+namespace UnitTests;
 
 public class WhenSetKey
 {
-    [Test]
+    [Fact]
     public void ForEmptyStore_NewKeyWillBeAdded()
     {
         // Arrange
@@ -16,10 +15,10 @@ public class WhenSetKey
         store.Set("anyNewKey", value);
         
         // Assert
-        Assert.That(store.Get("anyNewKey"), Is.EqualTo(value));
+        Assert.Equal(store.Get("anyNewKey"), value);
     }
 
-    [Test]
+    [Fact]
     public void ForExistingKey_ValueWillBeUpdated()
     {
         // Arrange
@@ -32,6 +31,6 @@ public class WhenSetKey
         store.Set(key, "newValue"u8.ToArray());
         
         // Assert
-        Assert.That(store.Get(key), Is.EqualTo("newValue"u8.ToArray()));
+        Assert.Equal(store.Get(key), "newValue"u8.ToArray());
     }
 }

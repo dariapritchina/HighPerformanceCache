@@ -1,15 +1,10 @@
-﻿using Tests.DSL;
+﻿using UnitTests.DSL;
 
-namespace Tests;
+namespace UnitTests;
 
 public class WhenGetKey
 {
-    [SetUp]
-    public void Setup()
-    {
-    }
-
-    [Test]
+    [Fact]
     public void ForNotExistingKey_ReturnsNull()
     {
         // Arrange
@@ -19,10 +14,10 @@ public class WhenGetKey
         var value = keyStore.Get("somethingKey");
         
         // Assert
-        Assert.That(value, Is.Null);
+        Assert.Null(value);
     }
     
-    [Test]
+    [Fact]
     public void ForExistingKey_ReturnsValue()
     {
         // Arrange
@@ -34,6 +29,6 @@ public class WhenGetKey
         var value = keyStore.Get("somethingKey");
         
         // Assert
-        Assert.That(value, Is.EqualTo("anyValue"u8.ToArray()));
+        Assert.Equal(value, "anyValue"u8.ToArray());
     }
 }

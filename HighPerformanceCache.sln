@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cache.Domain", "Cache.Domai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{7C96F9DC-4998-49CC-98A0-C630FA20FDB7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{D1FB2611-F3D1-4287-8C86-5CEBFA62ECCC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{7C96F9DC-4998-49CC-98A0-C630FA20FDB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C96F9DC-4998-49CC-98A0-C630FA20FDB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C96F9DC-4998-49CC-98A0-C630FA20FDB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1FB2611-F3D1-4287-8C86-5CEBFA62ECCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1FB2611-F3D1-4287-8C86-5CEBFA62ECCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1FB2611-F3D1-4287-8C86-5CEBFA62ECCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1FB2611-F3D1-4287-8C86-5CEBFA62ECCC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

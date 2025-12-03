@@ -1,4 +1,4 @@
-namespace Tests.DSL;
+namespace UnitTests.DSL;
 
 public class Create
 {

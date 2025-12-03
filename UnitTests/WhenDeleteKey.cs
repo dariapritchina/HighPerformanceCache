@@ -1,10 +1,10 @@
-using Tests.DSL;
+using UnitTests.DSL;
 
-namespace Tests;
+namespace UnitTests;
 
 public class WhenDeleteKey
 {
-    [Test]
+    [Fact]
     public void KeyAndValueWillBeDeleted()
     {
         // Arrange
@@ -17,6 +17,6 @@ public class WhenDeleteKey
         store.Delete(anyKey);
         
         // Assert
-        Assert.That(store.Get(anyKey), Is.Null);
+        Assert.Null(store.Get(anyKey));
     }
 }
