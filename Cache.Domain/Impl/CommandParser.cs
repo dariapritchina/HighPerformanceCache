@@ -20,6 +20,11 @@ public class CommandParser : ICommandParser
 
     private static ReadOnlySpan<char> SliceNextPart(ReadOnlySpan<char> input, int startFrom = 0)
     {
+        if (startFrom >= input.Length)
+        {
+            return default;
+        }
+        
         input = input[startFrom..];
         var firstIndexOfSeparator = input.IndexOf(SEPARATOR);
 
