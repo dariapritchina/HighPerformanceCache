@@ -39,4 +39,15 @@ public class WhenParseCommand
         Assert.Equal(expectedKey, parsedCommand.Key);
         Assert.True(parsedCommand.Value.IsEmpty);
     }
+
+    [Theory]
+    [InlineData("GET")]
+    public void WithoutKeyPart_ShouldThrowAnException(string input)
+    {
+        // Arrange
+        var spanInput = input.AsSpan();
+        
+       // Assert
+        Assert.Throws<ArgumentException>(() => CommandParser.Parse(input));
+    }
 }

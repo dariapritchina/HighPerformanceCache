@@ -10,12 +10,22 @@ public class CommandParser : ICommandParser
     {
         var command = SliceNextPart(input);
         var key = SliceNextPart(input, command.Length + 1);
+        CheckKeyIsNotEmpty(key);
+        
         var value = SliceNextPart(input, command.Length + 1 + key.Length + 1);
 
         return new CommandInfo(
             command: command,
             key: key,
             value: value);
+    }
+
+    private static void CheckKeyIsNotEmpty(ReadOnlySpan<char> key)
+    {
+        if (key.IsEmpty)
+        {
+            throw new ArgumentException("Key part in command is empty.");
+        }
     }
 
     private static ReadOnlySpan<char> SliceNextPart(ReadOnlySpan<char> input, int startFrom = 0)
