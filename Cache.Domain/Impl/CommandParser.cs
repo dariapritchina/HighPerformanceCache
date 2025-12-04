@@ -8,38 +8,45 @@ public class CommandParser : ICommandParser
     private const int NOT_FOUND_INDEX = -1;
     public static CommandInfo Parse(ReadOnlySpan<char> input)
     {
-        var command = SliceNextPart(input);
-        var key = SliceNextPart(input, command.Length + 1);
-        CheckKeyIsNotEmpty(key);
+        input = input.Trim();
         
-        var value = SliceNextPart(input, command.Length + 1 + key.Length + 1);
-
+        var command = TryReadNextPart(input);
+        input = CutPart(input, command);
+        
+        var key = TryReadNextPart(input);
+        input = CutPart(input, key);
+        
         return new CommandInfo(
             command: command,
             key: key,
-            value: value);
+            value: input.IsEmpty ? default : input);
     }
 
-    private static void CheckKeyIsNotEmpty(ReadOnlySpan<char> key)
+    private static ReadOnlySpan<char> CutPart(ReadOnlySpan<char> input, ReadOnlySpan<char> part)
     {
-        if (key.IsEmpty)
+        if (input.Length > part.Length)
         {
-            throw new ArgumentException("Key part in command is empty.");
+            input = input[(part.Length + 1)..].TrimStart();
         }
+        else if (input.Length == part.Length)
+        {
+            // Cut all the chars
+            input = ReadOnlySpan<char>.Empty;
+        }
+
+        return input;
     }
 
-    private static ReadOnlySpan<char> SliceNextPart(ReadOnlySpan<char> input, int startFrom = 0)
+    private static ReadOnlySpan<char> TryReadNextPart(ReadOnlySpan<char> input)
     {
-        if (startFrom >= input.Length)
-        {
-            return default;
-        }
-        
-        input = input[startFrom..];
-        var firstIndexOfSeparator = input.IndexOf(SEPARATOR);
+        var indexOfSeparator = input.IndexOf(SEPARATOR);
+        var part = (indexOfSeparator == NOT_FOUND_INDEX)
+            ? input
+            : input[..indexOfSeparator];
 
-        return firstIndexOfSeparator == NOT_FOUND_INDEX 
-            ? input 
-            : input[..firstIndexOfSeparator];
+        if (part.IsEmpty)
+            throw new ArgumentException("Part is empty.");
+
+        return part;
     }
 }
