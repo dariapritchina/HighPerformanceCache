@@ -33,4 +33,15 @@ public class WhenSetKey
         // Assert
         Assert.Equal("newValue"u8.ToArray(), store.Get(key));
     }
+
+    [Fact]
+    public void ForEmptyKey_ShouldThrowAnException()
+    {
+        // Arrange
+        const string key = "";
+        var store = Create.Store().Please();
+        
+        // Assert
+        Assert.Throws<ArgumentNullException>(() => store.Set(key, "anyValue"u8.ToArray()));
+    }
 }

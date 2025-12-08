@@ -13,6 +13,9 @@ public class SimpleKeyStore : IKeyStore
     
     public void Set(string key, byte[] value)
     {
+        if (string.IsNullOrEmpty(key))
+            throw new ArgumentNullException(nameof(key), "Key cannot be null or empty");
+        
         _keyValues[key] = value;
     }
 
