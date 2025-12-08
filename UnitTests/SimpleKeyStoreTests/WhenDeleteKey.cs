@@ -19,4 +19,15 @@ public class WhenDeleteKey
         // Assert
         Assert.Null(store.Get(anyKey));
     }
+
+    [Fact]
+    public void ForNotExistingKey_ShouldThrowAnException()
+    {
+        // Arrange
+        var store = Create.Store().Please();
+        
+        // Act
+        // Assert
+        Assert.Throws<ArgumentException>(() => store.Delete("anyNotExisingKey"));
+    }
 }

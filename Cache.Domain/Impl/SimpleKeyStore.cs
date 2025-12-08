@@ -25,6 +25,8 @@ public class SimpleKeyStore : IKeyStore
 
     public void Delete(string key)
     {
+        if (!_keyValues.ContainsKey(key))
+            throw new ArgumentException($"Key \'{key}\' not found");
         _keyValues.Remove(key);
     }
     
