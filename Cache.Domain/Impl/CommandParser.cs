@@ -10,10 +10,14 @@ public class CommandParser : ICommandParser
     {
         input = input.Trim();
         
-        var command = TryReadNextPart(input);
+        var command = ReadNextPart(input);
+        if (command.IsEmpty)
+            throw new ArgumentException("Command is empty.");
         input = CutPart(input, command);
         
-        var key = TryReadNextPart(input);
+        var key = ReadNextPart(input);
+        if (key.IsEmpty)
+            return default;
         input = CutPart(input, key);
         
         return new CommandInfo(
@@ -37,15 +41,12 @@ public class CommandParser : ICommandParser
         return input;
     }
 
-    private static ReadOnlySpan<char> TryReadNextPart(ReadOnlySpan<char> input)
+    private static ReadOnlySpan<char> ReadNextPart(ReadOnlySpan<char> input)
     {
         var indexOfSeparator = input.IndexOf(SEPARATOR);
         var part = (indexOfSeparator == NOT_FOUND_INDEX)
             ? input
             : input[..indexOfSeparator];
-
-        if (part.IsEmpty)
-            throw new ArgumentException("Part is empty.");
 
         return part;
     }
