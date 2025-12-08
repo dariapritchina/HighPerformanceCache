@@ -30,7 +30,7 @@ public class CommandParser : ICommandParser
     {
         if (input.Length > part.Length)
         {
-            input = input[(part.Length + 1)..].TrimStart();
+            input = input.Slice(part.Length + 1).TrimStart();
         }
         else if (input.Length == part.Length)
         {
@@ -46,7 +46,7 @@ public class CommandParser : ICommandParser
         var indexOfSeparator = input.IndexOf(SEPARATOR);
         var part = (indexOfSeparator == NOT_FOUND_INDEX)
             ? input
-            : input[..indexOfSeparator];
+            : input.Slice(0, indexOfSeparator);
 
         return part;
     }
