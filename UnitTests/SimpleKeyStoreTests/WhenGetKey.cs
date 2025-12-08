@@ -31,4 +31,16 @@ public class WhenGetKey
         // Assert
         Assert.Equal("anyValue"u8.ToArray(), value);
     }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    public void ForNullOrEmptyKey_ShouldThrowAnException(string? key)
+    {
+        // Arrange
+        var keyStore = Create.Store().Please();
+        
+        // Assert
+        Assert.Throws<ArgumentNullException>(() => keyStore.Get(key));
+    }
 }

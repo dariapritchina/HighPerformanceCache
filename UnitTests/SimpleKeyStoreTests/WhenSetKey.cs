@@ -34,11 +34,12 @@ public class WhenSetKey
         Assert.Equal("newValue"u8.ToArray(), store.Get(key));
     }
 
-    [Fact]
-    public void ForEmptyKey_ShouldThrowAnException()
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    public void ForEmptyKey_ShouldThrowAnException(string? key)
     {
         // Arrange
-        const string key = "";
         var store = Create.Store().Please();
         
         // Assert

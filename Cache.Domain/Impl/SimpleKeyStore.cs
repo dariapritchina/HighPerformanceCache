@@ -21,6 +21,9 @@ public class SimpleKeyStore : IKeyStore
 
     public byte[]? Get(string key)
     {
+        if (string.IsNullOrEmpty(key))
+            throw new ArgumentNullException(nameof(key), "Key cannot be null or empty");
+
         return _keyValues.GetValueOrDefault(key);
     }
 
