@@ -6,4 +6,9 @@ public class Create
     {
         return new KeyStoreBuilder();
     }
+
+    public static TcpServerBuilder TcpServer()
+    {
+        return new TcpServerBuilder();
+    }
 }

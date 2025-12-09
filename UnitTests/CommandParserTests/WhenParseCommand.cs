@@ -1,6 +1,6 @@
 using Cache.Domain.Impl;
 
-namespace UnitTests;
+namespace UnitTests.CommandParserTests;
 
 public class WhenParseCommand
 {
