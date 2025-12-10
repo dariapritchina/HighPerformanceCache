@@ -27,7 +27,7 @@ public class WhenStartServerAsync
     private IPEndPoint CreateDefaultEndPoint()
     {
         var ip = IPAddress.Parse("127.0.0.1");
-        var endpoint = new IPEndPoint(ip, 8080);
+        var endpoint = new IPEndPoint(ip, 9999);
         
         return endpoint;
     }
