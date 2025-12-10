@@ -24,11 +24,11 @@ public class TcpServer : IServer
         }
         catch (OperationCanceledException)
         {
-            Console.WriteLine("Operation was cancelled.");
+            Log("Operation was cancelled.");
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Log(e.ToString());
             throw;
         }
     }
@@ -47,21 +47,21 @@ public class TcpServer : IServer
 
                 if (bytesReceived == 0)
                 {
-                    Console.WriteLine("Connection closed by remote host.");
+                    Log("Connection closed by remote host.");
                     break;
                 }
 
                 var receivedMessage = Encoding.UTF8.GetString(buffer, 0, bytesReceived);
-                Console.WriteLine($"Received: {receivedMessage}"); 
+                Log($"Received: {receivedMessage}"); 
             }
         }
         catch (SocketException ex)
         {
-            Console.WriteLine($"Socket Error: {ex.Message}");
+            Log($"Socket Error: {ex.Message}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"General Error: {ex.Message}");
+            Log($"General Error: {ex.Message}");
         }
         finally
         {
@@ -77,5 +77,10 @@ public class TcpServer : IServer
         socket.Bind(endpoint);
         
         return socket;
+    }
+
+    private void Log(string message)
+    {
+        Console.WriteLine(message);
     }
 }
