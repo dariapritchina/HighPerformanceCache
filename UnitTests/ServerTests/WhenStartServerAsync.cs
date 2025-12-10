@@ -13,9 +13,11 @@ public class WhenStartServerAsync
     {
         // Arrange
         var server = Create.TcpServer().Please();
+        using var ctSource = new CancellationTokenSource();
+        ctSource.CancelAfter(500);
         
         // Act
-        await server.StartAsync(CreateDefaultEndPoint(), CancellationToken.None);
+        await server.StartAsync(CreateDefaultEndPoint(), ctSource.Token);
         
         // Assert
         Assert.NotNull(server);
