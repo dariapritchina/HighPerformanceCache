@@ -1,7 +1,4 @@
 using System.Net;
-using System.Net.Sockets;
-using Cache.Server;
-using Moq;
 using UnitTests.DSL;
 
 namespace UnitTests.ServerTests;
@@ -23,11 +20,11 @@ public class WhenStartServerAsync
         Assert.NotNull(server);
 
     }
-
+    
     private IPEndPoint CreateDefaultEndPoint()
     {
         var ip = IPAddress.Parse("127.0.0.1");
-        var endpoint = new IPEndPoint(ip, 9999);
+        var endpoint = new IPEndPoint(ip, 9995);
         
         return endpoint;
     }
