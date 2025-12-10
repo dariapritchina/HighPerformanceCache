@@ -14,6 +14,7 @@ public class TcpServer : IServer
         try
         {
             using var serverSocket = CreateServerSocket(endpoint);
+            Log("Server socket created.");
             serverSocket.Listen(_backlog);
 
             while (true)
