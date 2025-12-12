@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientApp", "ClientApp\Clie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerRunnerApp", "ServerRunnerApp\ServerRunnerApp.csproj", "{EEB4F1B8-0028-418D-A7D1-97CF0E44FF7D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{1473FB38-7095-4815-91D6-7A771882535E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{EEB4F1B8-0028-418D-A7D1-97CF0E44FF7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEB4F1B8-0028-418D-A7D1-97CF0E44FF7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEB4F1B8-0028-418D-A7D1-97CF0E44FF7D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EEB4F1B8-0028-418D-A7D1-97CF0E44FF7D} = {1473FB38-7095-4815-91D6-7A771882535E}
+		{6A6924EE-6FB6-4C28-A87B-A9776BFE3FFA} = {1473FB38-7095-4815-91D6-7A771882535E}
 	EndGlobalSection
 EndGlobal
