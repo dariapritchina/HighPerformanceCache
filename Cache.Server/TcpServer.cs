@@ -63,7 +63,7 @@ public class TcpServer : IServer
                 try
                 {
                     var command = CommandParser.Parse(receivedMessage);
-                    Log($"Received command: command=\'{command.Command}\', key=\'{command.Key}\', value=\'{receivedMessage}\'."); 
+                    Log($"Received command: command=\'{command.Command}\', key=\'{command.Key}\', value=\'{command.Value}\'."); 
                 }
                 catch (Exception e)
                 {
