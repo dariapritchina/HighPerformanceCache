@@ -14,7 +14,11 @@ public class SimpleKeyStore : IKeyStore
     public void Set(string key, byte[] value)
     {
         CheckKeyIsNotNullOrEmpty(key);
-        _keyValues[key] = value;
+        
+        if (!_keyValues.ContainsKey(key))
+            _keyValues.Add(key, value);
+        else
+            _keyValues[key] = value;
     }
 
     public byte[]? Get(string key)
