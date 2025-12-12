@@ -35,7 +35,9 @@ public class WhenGetKey
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public void ForNullOrEmptyKey_ShouldThrowAnException(string? key)
+    [InlineData(" ")]
+    [InlineData("   ")]
+    public void ForNullOrEmptyOrWhitespaceKey_ShouldThrowAnException(string? key)
     {
         // Arrange
         var keyStore = Create.Store().Please();

@@ -32,7 +32,7 @@ public class SimpleKeyStore : IKeyStore
     
     private static void CheckKeyIsNotNullOrEmpty(string key)
     {
-        if (string.IsNullOrEmpty(key))
+        if (string.IsNullOrWhiteSpace(key))
             throw new ArgumentNullException(nameof(key), "Key cannot be null or empty");
     }
 }
