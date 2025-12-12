@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Cache.Domain.Impl;
 
 namespace Cache.Server;
 
@@ -59,7 +60,16 @@ public class TcpServer : IServer
                 }
 
                 var receivedMessage = Encoding.UTF8.GetString(memoryBuffer, 0, bytesReceived);
-                Log($"Received: {receivedMessage}"); 
+                try
+                {
+                    var command = CommandParser.Parse(receivedMessage);
+                    Log($"Received command: command=\'{command.Command}\', key=\'{command.Key}\', value=\'{receivedMessage}\'."); 
+                }
+                catch (Exception e)
+                {
+                    Log($"Error when parse command {receivedMessage}: {e.Message}");
+                    throw;
+                }
             }
         }
         catch (SocketException ex)
