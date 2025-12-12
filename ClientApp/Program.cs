@@ -33,7 +33,7 @@ do
         clientSocket.Close();
     }
 }
-while (!NeedOneMoreMessage());
+while (NeedOneMoreMessage());
 
 bool NeedOneMoreMessage()
 {
