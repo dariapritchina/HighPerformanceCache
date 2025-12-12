@@ -10,6 +10,7 @@ public class TcpServer : IServer
 {
     private Socket? _serverSocket;
     private readonly int _backlog = 100;
+    private bool _isDisposed;
     
     public async Task StartAsync(IPEndPoint endpoint, CancellationToken ct)
     {
@@ -104,6 +105,26 @@ public class TcpServer : IServer
 
     public void Dispose()
     {
-        _serverSocket?.Dispose();
+        Dispose(true);
+        
+        // Предотвращаем попадание объекта в Finalization queue
+        GC.SuppressFinalize(this);
+    }
+    
+    protected virtual void Dispose(bool isManual)
+    {
+        if (_isDisposed) return;
+
+        if (isManual)
+        {
+            _serverSocket?.Dispose();
+        }
+
+        _isDisposed = true;
+    }
+
+    ~TcpServer()
+    {
+        Dispose(false);
     }
 }
