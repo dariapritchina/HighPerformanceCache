@@ -17,10 +17,17 @@ public class TcpServer : IServer
             Log("Server socket created.");
             serverSocket.Listen(_backlog);
 
-            while (true)
+            while (!ct.IsCancellationRequested)
             {
                 var clientSocket = await serverSocket.AcceptAsync(ct);
-                await ProcessClientAsync(clientSocket, ct);
+                await Task.Run(() => ProcessClientAsync(clientSocket, ct), ct)
+                    .ContinueWith(t =>
+                    {
+                        if (t.IsFaulted)
+                        {
+                            Log($"Error when accepting client {t.Exception.Message}");
+                        }
+                    }, ct);
             }
         }
         catch (OperationCanceledException)
