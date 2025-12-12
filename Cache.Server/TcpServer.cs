@@ -8,19 +8,20 @@ namespace Cache.Server;
 
 public class TcpServer : IServer
 {
+    private Socket? _serverSocket;
     private readonly int _backlog = 100;
     
     public async Task StartAsync(IPEndPoint endpoint, CancellationToken ct)
     {
         try
         {
-            using var serverSocket = CreateServerSocket(endpoint);
+            _serverSocket = CreateServerSocket(endpoint);
             Log("Server socket created.");
-            serverSocket.Listen(_backlog);
+            _serverSocket.Listen(_backlog);
 
             while (!ct.IsCancellationRequested)
             {
-                var clientSocket = await serverSocket.AcceptAsync(ct);
+                var clientSocket = await _serverSocket.AcceptAsync(ct);
                 await Task.Run(() => ProcessClientAsync(clientSocket, ct), ct)
                     .ContinueWith(t =>
                     {
@@ -99,5 +100,10 @@ public class TcpServer : IServer
     private void Log(string message)
     {
         Console.WriteLine(message);
+    }
+
+    public void Dispose()
+    {
+        _serverSocket?.Dispose();
     }
 }

@@ -9,7 +9,7 @@ public class WhenStartServerAsync
     public async Task ServerShouldBeNotNull()
     {
         // Arrange
-        var server = Create.TcpServer().Please();
+        using var server = Create.TcpServer().Please();
         using var ctSource = new CancellationTokenSource();
         ctSource.CancelAfter(500);
         
