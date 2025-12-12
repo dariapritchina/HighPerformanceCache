@@ -59,7 +59,7 @@ public class TcpServer : IServer
                     break;
                 }
 
-                var receivedMessage = Encoding.UTF8.GetString(buffer, 0, bytesReceived);
+                var receivedMessage = Encoding.UTF8.GetString(memoryBuffer, 0, bytesReceived);
                 Log($"Received: {receivedMessage}"); 
             }
         }
