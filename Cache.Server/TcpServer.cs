@@ -43,7 +43,6 @@ public class TcpServer : IServer
 
     private async Task ProcessClientAsync(Socket clientSocket, CancellationToken ct)
     {
-        var buffer = new byte[1024];
         var arrayPool = ArrayPool<byte>.Shared;
         var memoryBuffer = arrayPool.Rent(1024);
         
