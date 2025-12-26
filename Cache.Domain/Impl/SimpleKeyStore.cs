@@ -16,7 +16,7 @@ public class SimpleKeyStore : IKeyStore, IDisposable
     {
         CheckKeyIsNotNullOrEmpty(key);
         
-        if (!_keyValues.ContainsKey(key))
+        if (!ContainsKey(key))
             _keyValues.Add(key, value);
         else
             _keyValues[key] = value;
@@ -38,9 +38,22 @@ public class SimpleKeyStore : IKeyStore, IDisposable
 
     public void Delete(string key)
     {
-        if (!_keyValues.ContainsKey(key))
+        if (!ContainsKey(key))
             throw new ArgumentException($"Key \'{key}\' not found");
         _keyValues.Remove(key);
+    }
+
+    private bool ContainsKey(string key)
+    {
+        try
+        {
+            _lock.EnterReadLock();
+            return _keyValues.ContainsKey(key);
+        }
+        finally
+        {
+            _lock.ExitReadLock();;
+        }
     }
     
     private static void CheckKeyIsNotNullOrEmpty(string key)
