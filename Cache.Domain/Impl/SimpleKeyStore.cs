@@ -15,11 +15,15 @@ public class SimpleKeyStore : IKeyStore, IDisposable
     public void Set(string key, byte[] value)
     {
         CheckKeyIsNotNullOrEmpty(key);
-        
+
         if (!ContainsKey(key))
-            _keyValues.Add(key, value);
+        {
+            DoAddKeyValue(key, value);
+        }
         else
-            _keyValues[key] = value;
+        {
+            DoUpdateKeyValue(key, value);
+        }
     }
 
     public byte[]? Get(string key)
@@ -40,7 +44,42 @@ public class SimpleKeyStore : IKeyStore, IDisposable
     {
         if (!ContainsKey(key))
             throw new ArgumentException($"Key \'{key}\' not found");
-        _keyValues.Remove(key);
+
+        try
+        {
+            _lock.EnterWriteLock(); 
+            _keyValues.Remove(key);
+        }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
+    }
+
+    private void DoAddKeyValue(string key, byte[] value)
+    {
+        try
+        {
+            _lock.EnterWriteLock();
+            _keyValues.Add(key, value);
+        }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
+    }
+    
+    private void DoUpdateKeyValue(string key, byte[] value)
+    {
+        try
+        {
+            _lock.EnterWriteLock();
+            _keyValues[key] = value;
+        }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
 
     private bool ContainsKey(string key)
