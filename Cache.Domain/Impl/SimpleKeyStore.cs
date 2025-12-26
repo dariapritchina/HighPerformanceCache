@@ -2,9 +2,10 @@
 
 namespace Cache.Domain.Impl;
 
-public class SimpleKeyStore : IKeyStore
+public class SimpleKeyStore : IKeyStore, IDisposable
 {
     private readonly Dictionary<string, byte[]> _keyValues = new();
+    private readonly ReaderWriterLockSlim _lock = new();
     
     public SimpleKeyStore()
     {
@@ -24,7 +25,15 @@ public class SimpleKeyStore : IKeyStore
     public byte[]? Get(string key)
     {
         CheckKeyIsNotNullOrEmpty(key);
-        return _keyValues.GetValueOrDefault(key);
+        try
+        { 
+            _lock.EnterReadLock();
+            return _keyValues.GetValueOrDefault(key);
+        }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
     }
 
     public void Delete(string key)
@@ -38,5 +47,10 @@ public class SimpleKeyStore : IKeyStore
     {
         if (string.IsNullOrWhiteSpace(key))
             throw new ArgumentNullException(nameof(key), "Key cannot be null or empty");
+    }
+
+    public void Dispose()
+    {
+        _lock.Dispose();
     }
 }

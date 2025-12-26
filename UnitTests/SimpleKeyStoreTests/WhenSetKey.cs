@@ -8,7 +8,7 @@ public class WhenSetKey
     public void ForEmptyStore_NewKeyWillBeAdded()
     {
         // Arrange
-        var store = Create.Store().Please();
+        using var store = Create.Store().Please();
         var value = "anyValue"u8.ToArray();
         
         // Act
@@ -23,7 +23,7 @@ public class WhenSetKey
     {
         // Arrange
         const string key = "anyKey";
-        var store = Create.Store()
+        using var store = Create.Store()
             .WithKeyValue(key, "oldValue"u8.ToArray())
             .Please();
         
@@ -40,7 +40,7 @@ public class WhenSetKey
     public void ForEmptyKey_ShouldThrowAnException(string? key)
     {
         // Arrange
-        var store = Create.Store().Please();
+        using var store = Create.Store().Please();
         
         // Assert
         Assert.Throws<ArgumentNullException>(() => store.Set(key, "anyValue"u8.ToArray()));

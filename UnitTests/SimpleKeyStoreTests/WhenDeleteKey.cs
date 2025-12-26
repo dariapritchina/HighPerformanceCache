@@ -9,7 +9,7 @@ public class WhenDeleteKey
     {
         // Arrange
         const string anyKey = "anyKey"; 
-        var store = Create.Store()
+        using var store = Create.Store()
             .WithKeyValue(anyKey, "anyValue"u8.ToArray())
             .Please();
         
@@ -24,7 +24,7 @@ public class WhenDeleteKey
     public void ForNotExistingKey_ShouldThrowAnException()
     {
         // Arrange
-        var store = Create.Store().Please();
+        using var store = Create.Store().Please();
         
         // Act
         // Assert

@@ -8,7 +8,7 @@ public class WhenGetKey
     public void ForNotExistingKey_ReturnsNull()
     {
         // Arrange
-        var keyStore = Create.Store().Please();
+        using var keyStore = Create.Store().Please();
         
         // Act
         var value = keyStore.Get("somethingKey");
@@ -21,7 +21,7 @@ public class WhenGetKey
     public void ForExistingKey_ReturnsValue()
     {
         // Arrange
-        var keyStore = Create.Store()
+        using var keyStore = Create.Store()
             .WithKeyValue("somethingKey", "anyValue"u8.ToArray())
             .Please();
         
@@ -40,7 +40,7 @@ public class WhenGetKey
     public void ForNullOrEmptyOrWhitespaceKey_ShouldThrowAnException(string? key)
     {
         // Arrange
-        var keyStore = Create.Store().Please();
+        using var keyStore = Create.Store().Please();
         
         // Assert
         Assert.Throws<ArgumentNullException>(() => keyStore.Get(key));
