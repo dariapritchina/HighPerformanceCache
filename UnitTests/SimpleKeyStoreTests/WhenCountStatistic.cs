@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Text;
 using Cache.Domain.Interfaces;
+using Moq;
 using UnitTests.DSL;
 
 namespace UnitTests;
@@ -17,19 +18,14 @@ public class WhenCountStatistic
         using var store = Create.Store()
             .WithKeyValue(storedKey, storedValue)
             .Please();
-        var random = new Random();
+        
+        var readerTasks = Create
+            .Readers()
+            .Count(readersCount)
+            .FromStore(store, storedKey)
+            .Times(operationsPerTask).Please();
         
         // Act
-        var readerTasks = Enumerable.Range(0, readersCount)
-            .Select(iReader => Task.Run(async () =>
-            {
-                for (var i = 0; i < operationsPerTask; i++)
-                {
-                    store.Get(storedKey);
-                    await Task.Delay(random.Next(0, 20));
-                }
-            }))
-            .ToArray();
         await Task.WhenAll(readerTasks);
         var statistics = ((store as IStatisticStore)!).GetStatistic();
         
@@ -118,25 +114,12 @@ public class WhenCountStatistic
             .Please();
         var random = new Random();
         var exceptions = new ConcurrentBag<Exception>();
-        
-        // Act
-        var readerTasks = Enumerable.Range(0, readersCount)
-            .Select(iReader => Task.Run(async () =>
-            {
-                try
-                {
-                    for (var i = 0; i < operationsPerTask; i++)
-                    {
-                        var value = store.Get(storedKey);
-                        await Task.Delay(random.Next(0, 20));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    exceptions.Add(ex);
-                }
-            }))
-            .ToArray();
+
+        var readerTasks = Create
+            .Readers()
+            .Count(readersCount)
+            .FromStore(store, storedKey)
+            .Times(operationsPerTask).Please();
         var writerTasks = Enumerable.Range(0, writersCount)
             .Select(iWriter => Task.Run(async () =>
             {
@@ -155,6 +138,8 @@ public class WhenCountStatistic
                 }
             }))
             .ToArray();
+        
+        // Act
         await Task.WhenAll(readerTasks.Concat(writerTasks));
         var statistics = ((store as IStatisticStore)!).GetStatistic();
         

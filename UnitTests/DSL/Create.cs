@@ -11,4 +11,9 @@ public class Create
     {
         return new TcpServerBuilder();
     }
+
+    public static StoreReadersBuilder Readers()
+    {
+        return new StoreReadersBuilder();
+    }
 }
