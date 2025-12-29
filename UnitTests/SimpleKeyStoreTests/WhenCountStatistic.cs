@@ -105,4 +105,62 @@ public class WhenCountStatistic
         // Assert
         Assert.Equal(deleteTaskCount, statistics.deleteCount);
     }
+    
+    [Theory]
+    [InlineData(100, 50, 30)]
+    public async Task ForMultipleReadersAndWriters_ShouldCountOperations(int readersCount, int writersCount, int operationsPerTask)
+    {
+        // Arrange
+        var storedKey = "anyKey";
+        var storedValue = "anyValue"u8.ToArray();
+        using var store = Create.Store()
+            .WithKeyValue(storedKey, storedValue)
+            .Please();
+        var random = new Random();
+        var exceptions = new ConcurrentBag<Exception>();
+        
+        // Act
+        var readerTasks = Enumerable.Range(0, readersCount)
+            .Select(iReader => Task.Run(async () =>
+            {
+                try
+                {
+                    for (var i = 0; i < operationsPerTask; i++)
+                    {
+                        var value = store.Get(storedKey);
+                        await Task.Delay(random.Next(0, 20));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    exceptions.Add(ex);
+                }
+            }))
+            .ToArray();
+        var writerTasks = Enumerable.Range(0, writersCount)
+            .Select(iWriter => Task.Run(async () =>
+            {
+                try
+                {
+                    for (var iOp = 0; iOp < operationsPerTask; iOp++)
+                    {
+                        var value = Encoding.UTF8.GetBytes($"value_{iWriter}_{iOp}");
+                        store.Set(storedKey, value);
+                        await Task.Delay(random.Next(0, 20));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    exceptions.Add(ex);
+                }
+            }))
+            .ToArray();
+        await Task.WhenAll(readerTasks.Concat(writerTasks));
+        var statistics = ((store as IStatisticStore)!).GetStatistic();
+        
+        // Assert
+        Assert.Empty(exceptions);
+        Assert.Equal(writersCount * operationsPerTask + 1 /*initialSet*/, statistics.setCount);
+        Assert.Equal(readersCount * operationsPerTask, statistics.getCount);
+    }
 }
