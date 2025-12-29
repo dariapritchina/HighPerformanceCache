@@ -2,10 +2,13 @@
 
 namespace Cache.Domain.Impl;
 
-public class SimpleKeyStore : IKeyStore
+public class SimpleKeyStore : IKeyStore, IStatisticStore
 {
     private readonly Dictionary<string, byte[]> _keyValues = new();
     private readonly ReaderWriterLockSlim _lock = new();
+    
+    // statistics
+    private long _setCount, _getCount, _deleteCount = 0;
     
     public SimpleKeyStore()
     {
@@ -38,7 +41,9 @@ public class SimpleKeyStore : IKeyStore
         try
         { 
             _lock.EnterReadLock();
-            return _keyValues.GetValueOrDefault(key);
+            var value =  _keyValues.GetValueOrDefault(key);
+            Interlocked.Increment(ref _getCount);
+            return value;
         }
         finally
         {
@@ -60,6 +65,11 @@ public class SimpleKeyStore : IKeyStore
         {
             _lock.ExitWriteLock();
         }
+    }
+
+    public (long setCount, long getCount, long deleteCount) GetStatistic()
+    {
+        return (_setCount, _getCount, _deleteCount);
     }
     
     private static void CheckKeyIsNotNullOrEmpty(string key)

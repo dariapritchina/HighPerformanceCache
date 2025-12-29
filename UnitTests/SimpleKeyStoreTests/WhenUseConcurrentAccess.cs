@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Text;
+using Cache.Domain.Interfaces;
 using UnitTests.DSL;
 
 namespace UnitTests;
@@ -72,6 +73,36 @@ public class WhenUseConcurrentAccess
         
         // Assert
         Assert.All(readValues.ToArray(), v => Assert.Equal(v, storedValue));
+    }
+    
+    [Theory]
+    [InlineData(100, 30)]
+    public async Task WithMultipleReaders_StatisticsShouldCountGetOperations(int readersCount, int operationsPerTask)
+    {
+        // Arrange
+        var storedKey = "anyKey";
+        var storedValue = "anyValue"u8.ToArray();
+        using var store = Create.Store()
+            .WithKeyValue(storedKey, storedValue)
+            .Please();
+        var random = new Random();
+        
+        // Act
+        var readerTasks = Enumerable.Range(0, readersCount)
+            .Select(iReader => Task.Run(async () =>
+            {
+                for (var i = 0; i < operationsPerTask; i++)
+                {
+                    store.Get(storedKey);
+                    await Task.Delay(random.Next(0, 20));
+                }
+            }))
+            .ToArray();
+        await Task.WhenAll(readerTasks);
+        var statistics = ((store as IStatisticStore)!).GetStatistic();
+        
+        // Assert
+        Assert.Equal(readersCount * operationsPerTask, statistics.getCount);
     }
     
     [Theory]
