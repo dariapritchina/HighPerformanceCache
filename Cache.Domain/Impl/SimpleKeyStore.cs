@@ -2,7 +2,7 @@
 
 namespace Cache.Domain.Impl;
 
-public class SimpleKeyStore : IKeyStore, IDisposable
+public class SimpleKeyStore : IKeyStore
 {
     private readonly Dictionary<string, byte[]> _keyValues = new();
     private readonly ReaderWriterLockSlim _lock = new();
