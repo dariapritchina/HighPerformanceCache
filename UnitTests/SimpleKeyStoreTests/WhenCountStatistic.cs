@@ -19,8 +19,7 @@ public class WhenCountStatistic
             .WithKeyValue(storedKey, storedValue)
             .Please();
         
-        var readerTasks = Create
-            .Readers()
+        var readerTasks = Create.Readers()
             .Count(readersCount)
             .FromStore(store, storedKey)
             .Times(operationsPerTask).Please();
@@ -115,8 +114,7 @@ public class WhenCountStatistic
         var random = new Random();
         var exceptions = new ConcurrentBag<Exception>();
 
-        var readerTasks = Create
-            .Readers()
+        var readerTasks = Create.Readers()
             .Count(readersCount)
             .FromStore(store, storedKey)
             .Times(operationsPerTask).Please();
