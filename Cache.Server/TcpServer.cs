@@ -77,8 +77,10 @@ public class TcpServer : IServer
                 try
                 {
                     var command = CommandParser.Parse(receivedMessage);
+                    Log($"Received command: command=\'{command.Command}\', key=\'{command.Key}\', value=\'{command.Value}\'.");
                     var response = ProcessCommand(command);
-                    Log($"Received command: command=\'{command.Command}\', key=\'{command.Key}\', value=\'{command.Value}\'."); 
+                    Log($"Response to send: {response}.");
+                    await clientSocket.SendAsync(response);
                 }
                 catch (Exception e)
                 {

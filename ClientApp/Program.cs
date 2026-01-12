@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Buffers;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
@@ -16,6 +17,9 @@ do
         await clientSocket.ConnectAsync(endPoint, CancellationToken.None);
         var bytesSent = await clientSocket.SendAsync(messageBytes, SocketFlags.None);
         Console.WriteLine($"Bytes sent: {bytesSent}.");
+
+        var receivedMessage = await ReadAnswer(clientSocket);
+        Console.WriteLine(receivedMessage);
 
         clientSocket.Close();
     }
@@ -53,4 +57,14 @@ IPEndPoint CreateDefaultEndPoint()
     var endpoint = new IPEndPoint(ip, 9995);
         
     return endpoint;
+}
+
+async Task<string> ReadAnswer(Socket clientSocket)
+{
+    var arrayPool = ArrayPool<byte>.Shared;
+    var memoryBuffer = arrayPool.Rent(1024);
+    var bytesReceived = await clientSocket.ReceiveAsync(memoryBuffer, SocketFlags.None);
+    var receivedMessage = Encoding.UTF8.GetString(memoryBuffer, 0, bytesReceived);
+
+    return receivedMessage;
 }
