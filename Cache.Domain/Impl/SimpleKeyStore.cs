@@ -85,5 +85,6 @@ public class SimpleKeyStore : IKeyStore, IStatisticStore
     public void Dispose()
     {
         _lock.Dispose();
+        _keyValues.Clear();
     }
 }
