@@ -9,6 +9,11 @@ namespace Cache.Server;
 
 public class TcpServer : IServer
 {
+    private const string ResponseNull = @"(nil)\r\n";
+    private const string ResponseOk = @"OK\r\n";
+    private const string ResponseInvalidCommand = @"-ERR Unknown command\r\n";
+
+    
     private readonly IKeyStore _store;
     private Socket? _serverSocket;
     private readonly int _backlog = 100;
@@ -72,6 +77,7 @@ public class TcpServer : IServer
                 try
                 {
                     var command = CommandParser.Parse(receivedMessage);
+                    var response = ProcessCommand(command);
                     Log($"Received command: command=\'{command.Command}\', key=\'{command.Key}\', value=\'{command.Value}\'."); 
                 }
                 catch (Exception e)
@@ -95,6 +101,36 @@ public class TcpServer : IServer
             clientSocket.Shutdown(SocketShutdown.Both);
             clientSocket.Close();
         }
+    }
+
+    private byte[] ProcessCommand(CommandInfo command)
+    {
+        byte[] response;
+        
+        var key = command.Key.ToString();
+        switch (command.Command)
+        {
+            case "GET":
+                var value = _store.Get(key);
+                response = value ?? Encoding.UTF8.GetBytes(ResponseNull);
+                break;
+            case "SET":
+                var bytesCount = Encoding.UTF8.GetByteCount(command.Value); 
+                var byteArray = new byte[bytesCount];
+                Encoding.UTF8.GetBytes(command.Value, byteArray);
+                _store.Set(key, byteArray);
+                response = Encoding.UTF8.GetBytes(ResponseOk);
+                break;
+            case "DELETE":
+                _store.Delete(key);
+                response = Encoding.UTF8.GetBytes(ResponseOk);
+                break;
+            default:
+                response = Encoding.UTF8.GetBytes(ResponseInvalidCommand);
+                break;
+        }
+
+        return response;
     }
 
     private Socket CreateServerSocket(IPEndPoint endpoint)
