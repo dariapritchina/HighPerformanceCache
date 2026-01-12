@@ -3,14 +3,21 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Cache.Domain.Impl;
+using Cache.Domain.Interfaces;
 
 namespace Cache.Server;
 
 public class TcpServer : IServer
 {
+    private readonly IKeyStore _store;
     private Socket? _serverSocket;
     private readonly int _backlog = 100;
     private bool _isDisposed;
+
+    public TcpServer(IKeyStore store)
+    {
+        _store = store;
+    }
     
     public async Task StartAsync(IPEndPoint endpoint, CancellationToken ct)
     {
@@ -118,6 +125,7 @@ public class TcpServer : IServer
         if (isManual)
         {
             _serverSocket?.Dispose();
+            _store?.Dispose();
         }
 
         _isDisposed = true;

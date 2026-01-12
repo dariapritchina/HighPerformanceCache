@@ -1,9 +1,11 @@
 ﻿using System.Net;
+using Cache.Domain.Impl;
 using Cache.Server;
 
 var ip = IPAddress.Parse("127.0.0.1");
 var endpoint = new IPEndPoint(ip, 9995);
-using var server = new TcpServer();
+var store = new SimpleKeyStore();
+using var server = new TcpServer(store);
 
 Console.WriteLine("Server is starting...");
 
