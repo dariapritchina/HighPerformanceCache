@@ -11,7 +11,7 @@ var scenario = Scenario.Create("Load test scenario", async context =>
         {
             using var client = new SimpleTcpClient(endPoint);
             await client.ConnectAsync();
-            await client.SetAsync("anyKey", "SET MYKEY MYVALUE"u8.ToArray());
+            await client.SetAsync("anyKey", "MYVALUE"u8.ToArray());
 
             return Response.Ok();
         });
