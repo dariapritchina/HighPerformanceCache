@@ -30,17 +30,21 @@ public class SimpleTcpClient : ITcpClient
         }
     }
 
-    public async Task SetAsync(string key, byte[] value)
+    public async Task<string> SetAsync(string key, byte[] value)
     {
         CheckClientSocket();
 
+        var receivedMessage = string.Empty;
+        
         if (_clientSocket != null)
         {
             var messageBytes = ToSetCommandMessage(key, value);
             var bytesSent = await _clientSocket.SendAsync(messageBytes, SocketFlags.None);
-            var receivedMessage = await ReadAnswer(_clientSocket);
+            receivedMessage = await ReadAnswer(_clientSocket);
             Console.WriteLine(receivedMessage);
         }
+        
+        return receivedMessage;
     }
 
     public async Task GetAsync(string key)

@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text;
 using Cache.Client.Impl;
 using NBomber.CSharp;
 
@@ -7,19 +8,23 @@ var endPoint = CreateDefaultEndPoint();
 
 var scenario = Scenario.Create("Load test scenario", async context =>
     {
-        var createStep = await Step.Run("create", context, async () =>
+        var random = new Random();
+        
+        var setKeyValueStep = await Step.Run("Set random key-value", context, async () =>
         {
             using var client = new SimpleTcpClient(endPoint);
             await client.ConnectAsync();
-            await client.SetAsync("anyKey", "MYVALUE"u8.ToArray());
+            var randomKey = $"anyKey{random.Next()}";
+            var randomValue = $"anyValue{random.Next()}";
+            var response = await client.SetAsync(randomKey, Encoding.UTF8.GetBytes(randomValue));
 
-            return Response.Ok();
+            return (response ==  @"OK\r\n") ? Response.Ok() : Response.Fail();
         });
 
         return Response.Ok();
     })
     .WithWarmUpDuration(TimeSpan.FromSeconds(10))
-    .WithLoadSimulations(Simulation.Inject(1000, TimeSpan.FromTicks(1), TimeSpan.FromSeconds(30)));
+    .WithLoadSimulations(Simulation.Inject(100, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30)));
 
 NBomberRunner
     .RegisterScenarios(scenario)
