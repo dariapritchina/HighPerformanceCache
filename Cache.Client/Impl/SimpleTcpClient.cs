@@ -47,17 +47,21 @@ public class SimpleTcpClient : ITcpClient
         return receivedMessage;
     }
 
-    public async Task GetAsync(string key)
+    public async Task<string> GetAsync(string key)
     {
         CheckClientSocket();
+        
+        var receivedMessage = string.Empty;
 
         if (_clientSocket != null)
         {
             var messageBytes = ToGetCommandMessage(key);
             var bytesSent = await _clientSocket.SendAsync(messageBytes, SocketFlags.None);
-            var receivedMessage = await ReadAnswer(_clientSocket);
+            receivedMessage = await ReadAnswer(_clientSocket);
             Console.WriteLine(receivedMessage);
         }
+        
+        return receivedMessage;
     }
     
     private void CheckClientSocket()
