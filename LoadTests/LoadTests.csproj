@@ -11,4 +11,8 @@
       <PackageReference Include="NBomber" Version="6.1.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Cache.Client\Cache.Client.csproj" />
+    </ItemGroup>
+
 </Project>
