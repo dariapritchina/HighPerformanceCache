@@ -18,7 +18,7 @@ public class SimpleTcpClient : ITcpClient
     
     public async Task ConnectAsync()
     {
-        _clientSocket = CreateClientSocket(_endPoint);
+        _clientSocket = SocketFactory.Create(_endPoint);
 
         try
         {
@@ -60,11 +60,6 @@ public class SimpleTcpClient : ITcpClient
         }
     }
     
-    Socket CreateClientSocket(IPEndPoint endPoint)
-    {
-        return new Socket(SocketType.Stream, ProtocolType.Tcp);
-    }
-
     private void CheckClientSocket()
     {
         if (_clientSocket == null)

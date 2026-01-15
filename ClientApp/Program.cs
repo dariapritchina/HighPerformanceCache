@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Cache.Client;
 
 do
 {
@@ -10,7 +11,7 @@ do
     var messageBytes = Encoding.UTF8.GetBytes(message);
 
     var endPoint = CreateDefaultEndPoint();
-    using var clientSocket = CreateClientSocket(endPoint);
+    using var clientSocket = SocketFactory.Create(endPoint);
 
     try
     {
@@ -44,11 +45,6 @@ bool NeedOneMoreMessage()
     Console.WriteLine("One more message? (Y/N)");
     var answer = Console.ReadLine();
     return (answer != "N");
-}
-
-Socket CreateClientSocket(IPEndPoint endPoint)
-{
-    return new Socket(SocketType.Stream, ProtocolType.Tcp);
 }
 
 IPEndPoint CreateDefaultEndPoint()
